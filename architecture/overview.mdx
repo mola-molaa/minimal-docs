@@ -1,0 +1,216 @@
+---
+title: Architecture Overview
+icon: 🏗️
+---
+
+<Heading level="1">
+    miniMAL Architecture
+</Heading>
+
+<Paragraph>
+    miniMAL is designed as a <Mark bold>Lisp-0</Mark> language where functions, symbols, and strings all share the same namespace. This makes it a very compact language while still being powerful.
+</Paragraph>
+
+<Heading level="2">
+    Core Design Principles
+</Heading>
+
+<BulletedList>
+    <BulletedList>
+        <Mark bold>JSON Syntax</Mark>: All source code is valid JSON
+    </BulletedList>
+    <BulletedList>
+        <Mark bold>Lisp-0 Model</Mark>: Single namespace for functions and symbols
+    </BulletedList>
+    <BulletedList>
+        <Mark bold>Native Types</Mark>: Uses JavaScript native types (arrays for lists, objects for hash-maps)
+    </BulletedList>
+    <BulletedList>
+        <Mark bold>TCO</Mark>: Automatic tail-call optimization
+    </BulletedList>
+</BulletedList>
+
+<Heading level="2">
+    Evaluation Model
+</Heading>
+
+<Paragraph>
+    The core of miniMAL is the <Mark>EVAL</Mark> function which processes AST nodes:
+</Paragraph>
+
+<Paragraph blockColor="light_grey">
+<Paragraph>
+    <Mark>function EVAL(env, ast) {</Mark>
+</Paragraph>
+<Paragraph>
+    <Mark>    // If not a list, evaluate atom</Mark>
+</Paragraph>
+<Paragraph>
+    <Mark>    if (!Array.isArray(ast)) {</Mark>
+</Paragraph>
+<Paragraph>
+    <Mark>        return eval_atom(ast, env);</Mark>
+</Paragraph>
+<Paragraph>
+    <Mark>    }</Mark>
+</Paragraph>
+<Paragraph>
+    <Mark>    // Process list forms</Mark>
+</Paragraph>
+<Paragraph>
+    <Mark>    return apply_form(ast, env);</Mark>
+</Paragraph>
+<Paragraph>
+    <Mark>}</Mark>
+</Paragraph>
+</Paragraph>
+
+<Heading level="2">
+    Special Forms
+</Heading>
+
+<Table>
+    <TableRow>
+        <TableCell>
+            Form
+        </TableCell>
+        <TableCell>
+            Description
+        </TableCell>
+        <TableCell>
+            Example
+        </TableCell>
+    </TableRow>
+    <TableRow>
+        <TableCell>
+            <Mark>def</Mark>
+        </TableCell>
+        <TableCell>
+            Define symbol in current environment
+        </TableCell>
+        <TableCell>
+            <Mark>["def", "x", 42]</Mark>
+        </TableCell>
+    </TableRow>
+    <TableRow>
+        <TableCell>
+            <Mark>fn</Mark>
+        </TableCell>
+        <TableCell>
+            Create lambda function
+        </TableCell>
+        <TableCell>
+            <Mark>["fn", ["a"], ["*", "a", "a"]]</Mark>
+        </TableCell>
+    </TableRow>
+    <TableRow>
+        <TableCell>
+            <Mark>let</Mark>
+        </TableCell>
+        <TableCell>
+            Create new lexical scope
+        </TableCell>
+        <TableCell>
+            <Mark>["let", ["x", 1], "x"]</Mark>
+        </TableCell>
+    </TableRow>
+    <TableRow>
+        <TableCell>
+            <Mark>if</Mark>
+        </TableCell>
+        <TableCell>
+            Conditional branching
+        </TableCell>
+        <TableCell>
+            <Mark>["if", true, 1, 0]</Mark>
+        </TableCell>
+    </TableRow>
+    <TableRow>
+        <TableCell>
+            <Mark>do</Mark>
+        </TableCell>
+        <TableCell>
+            Evaluate multiple forms
+        </TableCell>
+        <TableCell>
+            <Mark>["do", expr1, expr2]</Mark>
+        </TableCell>
+    </TableRow>
+    <TableRow>
+        <TableCell>
+            <Mark>`</Mark>
+        </TableCell>
+        <TableCell>
+            Quote (unevaluated)
+        </TableCell>
+        <TableCell>
+            <Mark>["`", "symbol"]</Mark>
+        </TableCell>
+    </TableRow>
+    <TableRow>
+        <TableCell>
+            <Mark>~</Mark>
+        </TableCell>
+        <TableCell>
+            Mark as macro
+        </TableCell>
+        <TableCell>
+            <Mark>["~", ["fn", [], 1]]</Mark>
+        </TableCell>
+    </TableRow>
+    <TableRow>
+        <TableCell>
+            <Mark>try</Mark>
+        </TableCell>
+        <TableCell>
+            Exception handling
+        </TableCell>
+        <TableCell>
+            <Mark>["try", expr, ["catch", "e", handler]]</Mark>
+        </TableCell>
+    </TableRow>
+</Table>
+
+<Heading level="2">
+    Step-by-Step Implementations
+</Heading>
+
+<Paragraph>
+    The repository includes incremental step implementations:
+</Paragraph>
+
+<BulletedList>
+    <BulletedList>
+        <Mark>step0_repl</Mark>: Basic REPL with string echo
+    </BulletedList>
+    <BulletedList>
+        <Mark>step1_read_print</Mark>: JSON parsing and printing
+    </BulletedList>
+    <BulletedList>
+        <Mark>step2_eval</Mark>: Symbol evaluation and function calls
+    </BulletedList>
+    <BulletedList>
+        <Mark>step3_env</Mark>: Environment and lexical scoping
+    </BulletedList>
+    <BulletedList>
+        <Mark>step4_if_fn_do</Mark>: Conditionals, functions, do
+    </BulletedList>
+    <BulletedList>
+        <Mark>step5_tco</Mark>: Tail-call optimization
+    </BulletedList>
+    <BulletedList>
+        <Mark>step6_file</Mark>: File loading with slurp/read
+    </BulletedList>
+    <BulletedList>
+        <Mark>step7_interop</Mark>: JavaScript interop
+    </BulletedList>
+    <BulletedList>
+        <Mark>step8_macros</Mark>: Macro support
+    </BulletedList>
+    <BulletedList>
+        <Mark>step9_try</Mark>: Exception handling
+    </BulletedList>
+    <BulletedList>
+        <Mark>stepA_miniMAL</Mark>: Full self-hosting capable
+    </BulletedList>
+</BulletedList>

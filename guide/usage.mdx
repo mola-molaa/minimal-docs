@@ -1,0 +1,394 @@
+---
+title: Usage Guide
+icon: 📖
+---
+
+<Heading level="1">
+    miniMAL Usage Guide
+</Heading>
+
+<Heading level="2">
+    Basic Syntax
+</Heading>
+
+<Paragraph>
+    All miniMAL programs are valid JSON arrays representing S-expressions:
+</Paragraph>
+
+<Paragraph blockColor="light_grey">
+<Paragraph>
+    <Mark>["function_name", arg1, arg2, ...]</Mark>
+</Paragraph>
+</Paragraph>
+
+<Heading level="3">
+    Atoms
+</Heading>
+
+<Table>
+    <TableRow>
+        <TableCell>
+            Type
+        </TableCell>
+        <TableCell>
+            Example
+        </TableCell>
+        <TableCell>
+            Result
+        </TableCell>
+    </TableRow>
+    <TableRow>
+        <TableCell>
+            Number
+        </TableCell>
+        <TableCell>
+            <Mark>42</Mark>
+        </TableCell>
+        <TableCell>
+            42
+        </TableCell>
+    </TableRow>
+    <TableRow>
+        <TableCell>
+            String (quoted symbol)
+        </TableCell>
+        <TableCell>
+            <Mark>["`", "hello"]</Mark>
+        </TableCell>
+        <TableCell>
+            "hello"
+        </TableCell>
+    </TableRow>
+    <TableRow>
+        <TableCell>
+            Boolean
+        </TableCell>
+        <TableCell>
+            <Mark>true</Mark> / <Mark>false</Mark>
+        </TableCell>
+        <TableCell>
+            true / false
+        </TableCell>
+    </TableRow>
+    <TableRow>
+        <TableCell>
+            null
+        </TableCell>
+        <TableCell>
+            <Mark>null</Mark>
+        </TableCell>
+        <TableCell>
+            null
+        </TableCell>
+    </TableRow>
+    <TableRow>
+        <TableCell>
+            Symbol
+        </TableCell>
+        <TableCell>
+            <Mark>"x"</Mark>
+        </TableCell>
+        <TableCell>
+            value of x
+        </TableCell>
+    </TableRow>
+</Table>
+
+<Heading level="3">
+    Lists and Arrays
+</Heading>
+
+<Paragraph blockColor="light_grey">
+<Paragraph>
+    <Mark>["list", 1, 2, 3]</Mark>
+</Paragraph>
+<Paragraph>
+    <Mark>=> [1, 2, 3]</Mark>
+</Paragraph>
+<Paragraph>
+    <Mark>["`", [1, 2, 3]]</Mark>
+</Paragraph>
+<Paragraph>
+    <Mark>=> [1, 2, 3]</Mark>
+</Paragraph>
+</Paragraph>
+
+<Heading level="3">
+    Hash Maps
+</Heading>
+
+<Paragraph blockColor="light_grey">
+<Paragraph>
+    <Mark>{"a": 1, "b": 2}</Mark>
+</Paragraph>
+<Paragraph>
+    <Mark>=> {"a": 1, "b": 2}</Mark>
+</Paragraph>
+<Paragraph>
+    <Mark>["get", {"a": 1}, ["`", "a"]]</Mark>
+</Paragraph>
+<Paragraph>
+    <Mark>=> 1</Mark>
+</Paragraph>
+</Paragraph>
+
+<Heading level="2">
+    Built-in Operators
+</Heading>
+
+<Table>
+    <TableRow>
+        <TableCell>
+            Operator
+        </TableCell>
+        <TableCell>
+            Usage
+        </TableCell>
+        <TableCell>
+            Result
+        </TableCell>
+    </TableRow>
+    <TableRow>
+        <TableCell>
+            <Mark>+</Mark>
+        </TableCell>
+        <TableCell>
+            <Mark>["+", 2, 3]</Mark>
+        </TableCell>
+        <TableCell>
+            5
+        </TableCell>
+    </TableRow>
+    <TableRow>
+        <TableCell>
+            <Mark>-</Mark>
+        </TableCell>
+        <TableCell>
+            <Mark>["-", 5, 2]</Mark>
+        </TableCell>
+        <TableCell>
+            3
+        </TableCell>
+    </TableRow>
+    <TableRow>
+        <TableCell>
+            <Mark>*</Mark>
+        </TableCell>
+        <TableCell>
+            <Mark>["*", 3, 4]</Mark>
+        </TableCell>
+        <TableCell>
+            12
+        </TableCell>
+    </TableRow>
+    <TableRow>
+        <TableCell>
+            <Mark>/</Mark>
+        </TableCell>
+        <TableCell>
+            <Mark>["/", 8, 2]</Mark>
+        </TableCell>
+        <TableCell>
+            4
+        </TableCell>
+    </TableRow>
+    <TableRow>
+        <TableCell>
+            <Mark>=</Mark>
+        </TableCell>
+        <TableCell>
+            <Mark>["=", 5, 5]</Mark>
+        </TableCell>
+        <TableCell>
+            true
+        </TableCell>
+    </TableRow>
+    <TableRow>
+        <TableCell>
+            <Mark><</Mark>
+        </TableCell>
+        <TableCell>
+            <Mark>["<", 3, 5]</Mark>
+        </TableCell>
+        <TableCell>
+            true
+        </TableCell>
+    </TableRow>
+</Table>
+
+<Heading level="2">
+    Defining Functions
+</Heading>
+
+<Paragraph blockColor="light_grey">
+<Paragraph>
+    <Mark>["def", "sqr", ["fn", ["a"], ["*", "a", "a"]]]</Mark>
+</Paragraph>
+<Paragraph>
+    <Mark>["sqr", 7]</Mark>
+</Paragraph>
+<Paragraph>
+    <Mark>=> 49</Mark>
+</Paragraph>
+</Paragraph>
+
+<Heading level="3">
+    Variadic Functions
+</Heading>
+
+<Paragraph blockColor="light_grey">
+<Paragraph>
+    <Mark>["def", "sum", ["fn", ["&", "args"],</Mark>
+</Paragraph>
+<Paragraph>
+    <Mark>    ["apply", "+", ["list", 0, "args"]]]]</Mark>
+</Paragraph>
+<Paragraph>
+    <Mark>["sum", 1, 2, 3, 4]</Mark>
+</Paragraph>
+<Paragraph>
+    <Mark>=> 10</Mark>
+</Paragraph>
+</Paragraph>
+
+<Heading level="2">
+    Control Flow
+</Heading>
+
+<Heading level="3">
+    if Expression
+</Heading>
+
+<Paragraph blockColor="light_grey">
+<Paragraph>
+    <Mark>["if", true, 7, 8]</Mark>
+</Paragraph>
+<Paragraph>
+    <Mark>=> 7</Mark>
+</Paragraph>
+<Paragraph>
+    <Mark>["if", false, 7, 8]</Mark>
+</Paragraph>
+<Paragraph>
+    <Mark>=> 8</Mark>
+</Paragraph>
+</Paragraph>
+
+<Heading level="3">
+    do Block
+</Heading>
+
+<Paragraph blockColor="light_grey">
+<Paragraph>
+    <Mark>["do", ["def", "x", 6], 7, ["+", "x", 8]]</Mark>
+</Paragraph>
+<Paragraph>
+    <Mark>=> 14</Mark>
+</Paragraph>
+</Paragraph>
+
+<Heading level="3">
+    let Binding
+</Heading>
+
+<Paragraph blockColor="light_grey">
+<Paragraph>
+    <Mark>["let", ["x", 5], ["+", "x", 3]]</Mark>
+</Paragraph>
+<Paragraph>
+    <Mark>=> 8</Mark>
+</Paragraph>
+</Paragraph>
+
+<Heading level="2">
+    String Functions
+</Heading>
+
+<Paragraph blockColor="light_grey">
+<Paragraph>
+    <Mark>["pr-str", ["`", "hello"], ["`", "world"]]</Mark>
+</Paragraph>
+<Paragraph>
+    <Mark>=> "\"hello\" \"world\""</Mark>
+</Paragraph>
+<Paragraph>
+    <Mark>["str", ["`", "hello"], ["`", "world"]]</Mark>
+</Paragraph>
+<Paragraph>
+    <Mark>=> "helloworld"</Mark>
+</Paragraph>
+<Paragraph>
+    <Mark>["prn", ["`", "hello"], 42]</Mark>
+</Paragraph>
+<Paragraph>
+    <Mark>Output: "hello" 42</Mark>
+</Paragraph>
+</Paragraph>
+
+<Heading level="2">
+    Working with Lists
+</Heading>
+
+<Paragraph blockColor="light_grey">
+<Paragraph>
+    <Mark>["def", "nums", ["list", 1, 2, 3]]</Mark>
+</Paragraph>
+<Paragraph>
+    <Mark>["map", ["fn", ["x"], ["*", 2, "x"]], "nums"]</Mark>
+</Paragraph>
+<Paragraph>
+    <Mark>=> [2, 4, 6]</Mark>
+</Paragraph>
+<Paragraph>
+    <Mark>["nth", "nums", 1]</Mark>
+</Paragraph>
+<Paragraph>
+    <Mark>=> 2</Mark>
+</Paragraph>
+<Paragraph>
+    <Mark>["first", "nums"]</Mark>
+</Paragraph>
+<Paragraph>
+    <Mark>=> 1</Mark>
+</Paragraph>
+<Paragraph>
+    <Mark>["rest", "nums"]</Mark>
+</Paragraph>
+<Paragraph>
+    <Mark>=> [2, 3]</Mark>
+</Paragraph>
+</Paragraph>
+
+<Heading level="2">
+    Working with Hash Maps
+</Heading>
+
+<Paragraph blockColor="light_grey">
+<Paragraph>
+    <Mark>["def", "hm", {"a": 1, "b": 2}]</Mark>
+</Paragraph>
+<Paragraph>
+    <Mark>["get", "hm", ["`", "a"]]</Mark>
+</Paragraph>
+<Paragraph>
+    <Mark>=> 1</Mark>
+</Paragraph>
+<Paragraph>
+    <Mark>["contains?", "hm", ["`", "b"]]</Mark>
+</Paragraph>
+<Paragraph>
+    <Mark>=> true</Mark>
+</Paragraph>
+<Paragraph>
+    <Mark>["keys", "hm"]</Mark>
+</Paragraph>
+<Paragraph>
+    <Mark>=> ["a", "b"]</Mark>
+</Paragraph>
+<Paragraph>
+    <Mark>["vals", "hm"]</Mark>
+</Paragraph>
+<Paragraph>
+    <Mark>=> [1, 2]</Mark>
+</Paragraph>
+</Paragraph>

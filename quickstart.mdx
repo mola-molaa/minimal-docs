@@ -1,0 +1,158 @@
+---
+title: Quickstart
+icon: ⚡
+---
+
+<Heading level="1">
+    Geting Started with miniMAL
+</Heading>
+
+<Heading level="2">
+    Installation
+</Heading>
+
+<Paragraph>
+    Install miniMAL globally using npm:
+</Paragraph>
+
+<Paragraph blockColor="light_grey">
+<Paragraph>
+    <Mark>sudo npm install -g minimal-lisp</Mark>
+</Paragraph>
+</Paragraph>
+
+<Heading level="2">
+    Usage Options
+</Heading>
+
+<ColumnList>
+    <Column width="50%">
+        <Heading level="3">
+            REPL Mode
+        </Heading>
+        <Paragraph>
+            Start an interactive Read-Eval-Print Loop:
+        </Paragraph>
+        <Paragraph blockColor="light_grey">
+            <Paragraph>
+                <Mark>miniMAL</Mark>
+            </Paragraph>
+        </Paragraph>
+        <Paragraph>
+            Then type expressions like:
+        </Paragraph>
+        <Paragraph blockColor="light_grey">
+            <Paragraph>
+                <Mark>["+", 2, 3]</Mark>
+            </Paragraph>
+            <Paragraph>
+                <Mark>["def", "x", 42]</Mark>
+            </Paragraph>
+        </Paragraph>
+    </Column>
+    <Column width="50%">
+        <Heading level="3">
+            Run a File
+        </Heading>
+        <Paragraph>
+            Execute a miniMAL program:
+        </Paragraph>
+        <Paragraph blockColor="light_grey">
+            <Paragraph>
+                <Mark>miniMAL hello.json</Mark>
+            </Paragraph>
+        </Paragraph>
+        <Paragraph>
+            Where <Mark>hello.json</Mark> contains:
+        </Paragraph>
+        <Paragraph blockColor="light_grey">
+            <Paragraph>
+                <Mark>["." ,"console",["`","log"],["`", "hello world!"]]</Mark>
+            </Paragraph>
+        </Paragraph>
+    </Column>
+</ColumnList>
+
+<Heading level="2">
+    Shebang Scripts
+</Heading>
+
+<Paragraph>
+    Create executable scripts with miniMAL:
+</Paragraph>
+
+<Paragraph blockColor="light_grey">
+<Paragraph>
+    <Mark>#!/usr/bin/env miniMAL</Mark>
+</Paragraph>
+<Paragraph>
+    <Mark>["." ,"console",["`","log"],["`", "Hello from miniMAL!"]]</Mark>
+</Paragraph>
+</Paragraph>
+
+<Paragraph>
+    Make it executable:
+</Paragraph>
+
+<Paragraph blockColor="light_grey">
+<Paragraph>
+    <Mark>chmod +x hello.json</Mark>
+</Paragraph>
+<Paragraph>
+    <Mark>./hello.json</Mark>
+</Paragraph>
+</Paragraph>
+
+<Heading level="2">
+    As a Library
+</Heading>
+
+<Heading level="3">
+    Node.js Library
+</Heading>
+
+<Paragraph blockColor="light_grey">
+<Paragraph>
+    <Mark>var miniMAL = require('minimal-lisp'),</Mark>
+</Paragraph>
+<Paragraph>
+    <Mark>    m = miniMAL(global);</Mark>
+</Paragraph>
+<Paragraph>
+    <Mark>m.eval(["+", 2, 3]);</Mark>
+</Paragraph>
+</Paragraph>
+
+<Heading level="3">
+    Web Library
+</Heading>
+
+<Paragraph>
+    Include in your HTML:
+</Paragraph>
+
+<Paragraph blockColor="light_grey">
+<Paragraph>
+    <Mark><script src="node_modules/minimal-lisp/js/web/miniMAL-min.js"></script></Mark>
+</Paragraph>
+<Paragraph>
+    <Mark><script></Mark>
+</Paragraph>
+<Paragraph>
+    <Mark>var m = miniMAL();</Mark>
+</Paragraph>
+<Paragraph>
+    <Mark>m.eval(["+", 2, 3]);</Mark>
+</Paragraph>
+<Paragraph>
+    <Mark></script></Mark>
+</Paragraph>
+</Paragraph>
+
+<Heading level="2">
+    Online REPL
+</Heading>
+
+<Paragraph>
+    Try miniMAL instantly in your browser: <Link href="http://kanaka.github.io/miniMAL/">Online REPL</Link>
+</Paragraph>

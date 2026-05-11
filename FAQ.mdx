@@ -1,0 +1,357 @@
+---
+title: FAQ
+icon: ❓
+---
+
+<Heading level="1">
+    Frequently Asked Questions
+</Heading>
+
+<Heading level="2">
+    General
+</Heading>
+
+<Heading level="3">
+    What does "miniMAL" stand for?
+</Heading>
+
+<Paragraph>
+    <Mark bold>miniMAL</Mark> stands for <Mark bold>Minimal Lisp</Mark>. It is a compact Lisp interpreter designed to be as small as possible while still being fully functional.
+</Paragraph>
+
+<Heading level="3">
+    Why JSON for source code?
+</Heading>
+
+<Paragraph>
+    Using JSON as the source format eliminates the need for a complex parser. JSON parsers are available in virtually every language, making miniMAL easy to implement and port.
+</Paragraph>
+
+<Heading level="3">
+    What is a "Lisp-0" language?
+</Heading>
+
+<Paragraph>
+    In Lisp-0, <Mark bold>functions, symbols, and strings share the same namespace</Mark>. This is different from Lisp-1 (functions and symbols share a namespace) and Lisp-2 (separate namespaces for functions and symbols).
+</Paragraph>
+
+<Callout icon="💡" blockColor="light_blue" borderColor="blue">
+    This single-namespace design makes miniMAL very compact but requires quoted strings for string literals.
+</Callout>
+
+<Heading level="2">
+    Usage
+</Heading>
+
+<Heading level="3">
+    How do I write a string in miniMAL?
+</Heading>
+
+<Paragraph>
+    Strings are written as <Mark>quoted symbols</Mark> using the backtick (<Mark>`</Mark>) form:
+</Paragraph>
+
+<Paragraph blockColor="light_grey">
+<Paragraph>
+    <Mark>["`", "hello world"]</Mark>
+</Paragraph>
+<Paragraph>
+    <Mark>=> "hello world"</Mark>
+</Paragraph>
+</Paragraph>
+
+<Heading level="3">
+    How do I define a variable?
+</Heading>
+
+<Paragraph blockColor="light_grey">
+<Paragraph>
+    <Mark>["def", "x", 42]</Mark>
+</Paragraph>
+<Paragraph>
+    <Mark>=> 42</Mark>
+</Paragraph>
+</Paragraph>
+
+<Heading level="3">
+    How do I create a function?
+</Heading>
+
+<Paragraph blockColor="light_grey">
+<Paragraph>
+    <Mark>["def", "sqr", ["fn", ["a"], ["*", "a", "a"]]]</Mark>
+</Paragraph>
+<Paragraph>
+    <Mark>["sqr", 7]</Mark>
+</Paragraph>
+<Paragraph>
+    <Mark>=> 49</Mark>
+</Paragraph>
+</Paragraph>
+
+<Heading level="3">
+    What is the difference between prn, println, pr-str, and str?
+</Heading>
+
+<Table>
+    <TableRow>
+        <TableCell>
+            Function
+        </TableCell>
+        <TableCell>
+            Output Format
+        </TableCell>
+        <TableCell>
+            Newline
+        </TableCell>
+    </TableRow>
+    <TableRow>
+        <TableCell>
+            <Mark>prn</Mark>
+        </TableCell>
+        <TableCell>
+            Quoted strings
+        </TableCell>
+        <TableCell>
+            Yes
+        </TableCell>
+    </TableRow>
+    <TableRow>
+        <TableCell>
+            <Mark>println</Mark>
+        </TableCell>
+        <TableCell>
+            Unquoted strings
+        </TableCell>
+        <TableCell>
+            Yes
+        </TableCell>
+    </TableRow>
+    <TableRow>
+        <TableCell>
+            <Mark>pr-str</Mark>
+        </TableCell>
+        <TableCell>
+            Quoted strings
+        </TableCell>
+        <TableCell>
+            No (returns string)
+        </TableCell>
+    </TableRow>
+    <TableRow>
+        <TableCell>
+            <Mark>str</Mark>
+        </TableCell>
+        <TableCell>
+            Unquoted strings
+        </TableCell>
+        <TableCell>
+            No (returns string)
+        </TableCell>
+    </TableRow>
+</Table>
+
+<Heading level="2">
+    Technical
+</Heading>
+
+<Heading level="3">
+    How does Tail-Call Optimization work?
+</Heading>
+
+<Paragraph>
+    miniMAL uses a <Mark bold>while(true) loop</Mark> in the EVAL function. When a tail call is detected (function with an <Mark>A</Mark> property), instead of recursively calling the function, EVAL:
+</Paragraph>
+
+<BulletedList>
+    <BulletedList>
+        Sets the <Mark>ast</Mark> to the function body
+    </BulletedList>
+    <BulletedList>
+        Creates a new environment with bound parameters
+    </BulletedList>
+    <BulletedList>
+        Continues the while loop (no stack growth)
+    </BulletedList>
+</BulletedList>
+
+<Heading level="3">
+    What is the 1024 byte limit?
+</Heading>
+
+<Paragraph>
+    The core miniMAL interpreter (JS1K version) fits in <Mark bold>less than 1024 bytes</Mark> of JavaScript. This was achieved through:
+</Paragraph>
+
+<BulletedList>
+    <BulletedList>
+        Aggressive minification
+    </BulletedList>
+    <BulletedList>
+        Using <Mark>eval()</Mark> and <Mark>with()</Mark> tricks
+    </BulletedList>
+    <BulletedList>
+        Packing code into a string and unpacking at runtime
+    </BulletedList>
+</BulletedList>
+
+<Heading level="3">
+    Can miniMAL run itself?
+</Heading>
+
+<Paragraph>
+    Yes! miniMAL is powerful enough to implement a full <Link href="https://github.com/kanaka/mal/tree/master/impls/miniMAL">Make-A-Lisp</Link> interpreter in itself. This demonstrates its self-hosting capability.
+</Paragraph>
+
+<Heading level="3">
+    How do macros work?
+</Heading>
+
+<Paragraph>
+    Macros are functions marked with the <Mark>~</Mark> special form. They receive <Mark bold>unevaluated arguments</Mark> and return code to be evaluated:
+</Paragraph>
+
+<Paragraph blockColor="light_grey">
+<Paragraph>
+    <Mark>["def", "unless", ["~", ["fn", ["p", "a", "b"],</Mark>
+</Paragraph>
+<Paragraph>
+    <Mark>    ["list", ["`", "if"], "p", "b", "a"]]]]</Mark>
+</Paragraph>
+<Paragraph>
+    <Mark>["unless", false, 7, 8]</Mark>
+</Paragraph>
+<Paragraph>
+    <Mark>=> 7</Mark>
+</Paragraph>
+</Paragraph>
+
+<Paragraph>
+    The macro returns <Mark>["if", false, 8, 7]</Mark> which is then evaluated.
+</Paragraph>
+
+<Heading level="2">
+    Implementation
+</Heading>
+
+<Heading level="3">
+    Which implementation should I use?
+</Heading>
+
+<Table>
+    <TableRow>
+        <TableCell>
+            Use Case
+        </TableCell>
+        <TableCell>
+            Implementation
+        </TableCell>
+    </TableRow>
+    <TableRow>
+        <TableCell>
+            Learning/Reading
+        </TableCell>
+        <TableCell>
+            <Mark>stepB_node.js</Mark> or <Mark>step*.py</Mark>
+        </TableCell>
+    </TableRow>
+    <TableRow>
+        <TableCell>
+            Production (Node.js)
+        </TableCell>
+        <TableCell>
+            <Mark>miniMAL-node.js</Mark>
+        </TableCell>
+    </TableRow>
+    <TableRow>
+        <TableCell>
+            Web browser
+        </TableCell>
+        <TableCell>
+            <Mark>web/miniMAL-min.js</Mark>
+        </TableCell>
+    </TableRow>
+    <TableRow>
+        <TableCell>
+            Size competition
+        </TableCell>
+        <TableCell>
+            <Mark>miniMAL-core.js</Mark> (< 1KB)
+        </TableCell>
+    </TableRow>
+</Table>
+
+<Heading level="3">
+    Can I use miniMAL as a library?
+</Heading>
+
+<Paragraph>
+    Yes, install via npm and require it:
+</Paragraph>
+
+<Paragraph blockColor="light_grey">
+<Paragraph>
+    <Mark>var miniMAL = require('minimal-lisp');</Mark>
+</Paragraph>
+<Paragraph>
+    <Mark>var m = miniMAL(global);</Mark>
+</Paragraph>
+<Paragraph>
+    <Mark>m.eval(["+", 2, 3]);</Mark>
+</Paragraph>
+</Paragraph>
+
+<Heading level="2">
+    Troubleshooting
+</Heading>
+
+<Heading level="3">
+    "not found" error
+</Heading>
+
+<Paragraph>
+    This means you are trying to use a symbol that hasn't been defined in the current environment. Make sure to <Mark>def</Mark> it first:
+</Paragraph>
+
+<Paragraph blockColor="light_grey">
+<Paragraph>
+    <Mark>["def", "x", 10]  ; Define x first</Mark>
+</Paragraph>
+<Paragraph>
+    <Mark>["+", "x", 5]      ; Now x is available</Mark>
+</Paragraph>
+</Paragraph>
+
+<Heading level="3">
+    Stack overflow with recursion
+</Heading>
+
+<Paragraph>
+    Make sure your recursive function is <Mark bold>tail-call optimized</Mark>. The recursive call must be the very last thing the function does:
+</Paragraph>
+
+<Callout icon="✅" blockColor="light_green" borderColor="green">
+    Good (tail call):
+    <Paragraph blockColor="light_grey">
+        <Mark>["fn", ["n", "acc"],</Mark>
+    </Paragraph>
+    <Paragraph blockColor="light_grey">
+        <Mark>    ["if", ["=", "n", 0], "acc",</Mark>
+    </Paragraph>
+    <Paragraph blockColor="light_grey">
+        <Mark>        ["sum2", ["-", "n", 1], ["+", "n", "acc"]]]]</Mark>
+    </Paragraph>
+</Callout>
+
+<Callout icon="❌" blockColor="light_red" borderColor="red">
+    Bad (not tail call - addition happens after):
+    <Paragraph blockColor="light_grey">
+        <Mark>["fn", ["n"],</Mark>
+    </Paragraph>
+    <Paragraph blockColor="light_grey">
+        <Mark>    ["if", ["=", "n", 0], 0,</Mark>
+    </Paragraph>
+    <Paragraph blockColor="light_grey">
+        <Mark>        ["+", "n", ["sum1", ["-", "n", 1]]]]</Mark>
+    </Paragraph>
+</Callout>

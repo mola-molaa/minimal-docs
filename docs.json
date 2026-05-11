@@ -1,0 +1,28 @@
+{
+  "$schema": "https://mintlify.com/docs.json",
+  "name": "MiniMAL Documentation",
+  "navigation": {
+    "groups": [
+      {
+        "group": "Get Started",
+        "pages": ["introduction", "quickstart"]
+      },
+      {
+        "group": "Architecture",
+        "pages": ["architecture/overview", "architecture/features"]
+      },
+      {
+        "group": "Guide",
+        "pages": ["guide/usage", "guide/eval-model"]
+      },
+      {
+        "group": "Reference",
+        "pages": ["reference/js-impl", "reference/python-impl", "reference/core-functions"]
+      },
+      {
+        "group": "More",
+        "pages": ["FAQ"]
+      }
+    ]
+  }
+}

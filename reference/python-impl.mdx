@@ -1,0 +1,339 @@
+---
+title: Python Implementation
+icon: 🐍
+---
+
+<Heading level="1">
+    Python Implementation
+</Heading>
+
+<Paragraph>
+    miniMAL has a Python implementation that demonstrates the language's core concepts in a readable, cross-platform form.
+</Paragraph>
+
+<Heading level="2">
+    File Structure
+</Heading>
+
+<Table>
+    <TableRow>
+        <TableCell>
+            File
+        </TableCell>
+        <TableCell>
+            Description
+        </TableCell>
+    </TableRow>
+    <TableRow>
+        <TableCell>
+            <Mark>step0_repl.py</Mark>
+        </TableCell>
+        <TableCell>
+            Basic REPL echo
+        </TableCell>
+    </TableRow>
+    <TableRow>
+        <TableCell>
+            <Mark>step1_read_print.py</Mark>
+        </TableCell>
+        <TableCell>
+            JSON parsing
+        </TableCell>
+    </TableRow>
+    <TableRow>
+        <TableCell>
+            <Mark>step2_eval.py</Mark>
+        </TableCell>
+        <TableCell>
+            Symbol evaluation
+        </TableCell>
+    </TableRow>
+    <TableRow>
+        <TableCell>
+            <Mark>step3_env.py</Mark>
+        </TableCell>
+        <TableCell>
+            Environment/binding
+        </TableCell>
+    </TableRow>
+    <TableRow>
+        <TableCell>
+            <Mark>step4_if_fn_do.py</Mark>
+        </TableCell>
+        <TableCell>
+            Conditionals, functions
+        </TableCell>
+    </TableRow>
+    <TableRow>
+        <TableCell>
+            <Mark>step5_tco.py</Mark>
+        </TableCell>
+        <TableCell>
+            Tail-call optimization
+        </TableCell>
+    </TableRow>
+    <TableRow>
+        <TableCell>
+            <Mark>step6_file.py</Mark>
+        </TableCell>
+        <TableCell>
+            File I/O (slurp/read)
+        </TableCell>
+    </TableRow>
+    <TableRow>
+        <TableCell>
+            <Mark>step7_interop.py</Mark>
+        </TableCell>
+        <TableCell>
+            Python interop
+        </TableCell>
+    </TableRow>
+    <TableRow>
+        <TableCell>
+            <Mark>step8_macros.py</Mark>
+        </TableCell>
+        <TableCell>
+            Macro support
+        </TableCell>
+    </TableRow>
+    <TableRow>
+        <TableCell>
+            <Mark>step9_try.py</Mark>
+        </TableCell>
+        <TableCell>
+            Exception handling
+        </TableCell>
+    </TableRow>
+    <TableRow>
+        <TableCell>
+            <Mark>stepA_miniMAL.py</Mark>
+        </TableCell>
+        <TableCell>
+            Full implementation
+        </TableCell>
+    </TableRow>
+</Table>
+
+<Heading level="2">
+    Core EVAL Function
+</Heading>
+
+<Paragraph>
+    The Python version uses a similar <Mark>EVAL</Mark> function with TCO using <Mark>while True</Mark> loop:
+</Paragraph>
+
+<Paragraph blockColor="light_grey">
+<Paragraph>
+    <Mark>def EVAL(ast, env):</Mark>
+</Paragraph>
+<Paragraph>
+    <Mark>    while True:</Mark>
+</Paragraph>
+<Paragraph>
+    <Mark>        if type(ast) != list:</Mark>
+</Paragraph>
+<Paragraph>
+    <Mark>            return getattr(env, ast) if type(ast) == str else ast</Mark>
+</Paragraph>
+<Paragraph>
+    <Mark>        # Apply forms...</Mark>
+</Paragraph>
+</Paragraph>
+
+<Heading level="2">
+    Environment Class
+</Heading>
+
+<Paragraph blockColor="light_grey">
+<Paragraph>
+    <Mark>def Env(outer=object, binds=[], exprs=[], d=None):</Mark>
+</Paragraph>
+<Paragraph>
+    <Mark>    d = d or {}</Mark>
+</Paragraph>
+<Paragraph>
+    <Mark>    for i in range(len(binds)):</Mark>
+</Paragraph>
+<Paragraph>
+    <Mark>        if binds[i] == "&":</Mark>
+</Paragraph>
+<Paragraph>
+    <Mark>            d[binds[i+1]] = exprs[i:]</Mark>
+</Paragraph>
+<Paragraph>
+    <Mark>            break</Mark>
+</Paragraph>
+<Paragraph>
+    <Mark>    return type("Env", (outer,), d)</Mark>
+</Paragraph>
+</Paragraph>
+
+<Paragraph>
+    Uses Python's <Mark>type()</Mark> to create dynamic classes with prototype chain for scope lookup.
+</Paragraph>
+
+<Heading level="2">
+    Special Forms
+</Heading>
+
+<Heading level="3">
+    def
+</Heading>
+
+<Paragraph blockColor="light_grey">
+<Paragraph>
+    <Mark>if "def" == ast[0]:</Mark>
+</Paragraph>
+<Paragraph>
+    <Mark>    setattr(env, ast[1], EVAL(ast[2], env))</Mark>
+</Paragraph>
+<Paragraph>
+    <Mark>    return getattr(env, ast[1])</Mark>
+</Paragraph>
+</Paragraph>
+
+<Heading level="3">
+    fn (with TCO)
+</Heading>
+
+<Paragraph blockColor="light_grey">
+<Paragraph>
+    <Mark>if "fn" == ast[0]:</Mark>
+</Paragraph>
+<Paragraph>
+    <Mark>    fn = lambda *a: EVAL(ast[2], Env(env, ast[1], [*a]))</Mark>
+</Paragraph>
+<Paragraph>
+    <Mark>    fn.A = [ast[2], env, ast[1]]  # For TCO</Mark>
+</Paragraph>
+<Paragraph>
+    <Mark>    return fn</Mark>
+</Paragraph>
+</Paragraph>
+
+<Heading level="3">
+    if (TCO)
+</Heading>
+
+<Paragraph blockColor="light_grey">
+<Paragraph>
+    <Mark>if "if" == ast[0]:</Mark>
+</Paragraph>
+<Paragraph>
+    <Mark>    ast = ast[2] if EVAL(ast[1], env) else (*ast[3:4], None)[0]</Mark>
+</Paragraph>
+<Paragraph>
+<Paragraph>
+    <Mark>    # TCO: loop continues with new ast</Mark>
+</Paragraph>
+</Paragraph>
+
+<Heading level="2">
+    Built-in Functions
+</Heading>
+
+<Paragraph blockColor="light_grey">
+<Paragraph>
+    <Mark>E = Env(d={</Mark>
+</Paragraph>
+<Paragraph>
+    <Mark>    '=':   lambda a,b: a==b,</Mark>
+</Paragraph>
+<Paragraph>
+    <Mark>    '<':   lambda a,b: a<b,</Mark>
+</Paragraph>
+<Paragraph>
+    <Mark>    '+':   lambda a,b: a+b,</Mark>
+</Paragraph>
+<Paragraph>
+    <Mark>    '-':   lambda a,b: a-b,</Mark>
+</Paragraph>
+<Paragraph>
+    <Mark>    '*':   lambda a,b: a*b,</Mark>
+</Paragraph>
+<Paragraph>
+    <Mark>    '/':   lambda a,b: int(a/b),</Mark>
+</Paragraph>
+<Paragraph>
+    <Mark>    'list': lambda *a: [*a],</Mark>
+</Paragraph>
+<Paragraph>
+    <Mark>})</Mark>
+</Paragraph>
+</Paragraph>
+
+<Heading level="2">
+    Running the Python Version
+</Heading>
+
+<Heading level="3">
+    REPL Mode
+</Heading>
+
+<Paragraph blockColor="light_grey">
+<Paragraph>
+    <Mark>python3 stepA_miniMAL.py</Mark>
+</Paragraph>
+</Paragraph>
+
+<Heading level="3">
+    Run a File
+</Heading>
+
+<Paragraph blockColor="light_grey">
+<Paragraph>
+    <Mark>python3 stepA_miniMAL.py program.json</Mark>
+</Paragraph>
+</Paragraph>
+
+<Heading level="3">
+    Example Session
+</Heading>
+
+<Paragraph blockColor="light_grey">
+<Paragraph>
+    <Mark>> ["+", 2, 3]</Mark>
+</Paragraph>
+<Paragraph>
+    <Mark>5</Mark>
+</Paragraph>
+<Paragraph>
+    <Mark>> ["def", "sqr", ["fn", ["a"], ["*", "a", "a"]]]</Mark>
+</Paragraph>
+<Paragraph>
+    <Mark>null</Mark>
+</Paragraph>
+<Paragraph>
+    <Mark>> ["sqr", 7]</Mark>
+</Paragraph>
+<Paragraph>
+    <Mark>49</Mark>
+</Paragraph>
+</Paragraph>
+
+<Heading level="2">
+    Key Differences from JS Version
+</Heading>
+
+<BulletedList>
+    <BulletedList>
+        Uses <Mark>getattr/setattr</Mark> for environment lookups
+    </BulletedList>
+    <BulletedList>
+        Dynamic class creation with <Mark>type()</Mark>
+    </BulletedList>
+    <BulletedList>
+        <Mark>builtins.__dict__</Mark> for Python interop
+    </BulletedList>
+    <BulletedList>
+        <Mark>sys.argv[2:]</Mark> for command-line arguments
+    </BulletedList>
+</BulletedList>
+
+<Heading level="2">
+    Python Package
+</Heading>
+
+<Paragraph>
+    The Python implementation can be packaged as a <Mark>.pyz</Mark> file (1.1KB) for easy distribution.
+</Paragraph>

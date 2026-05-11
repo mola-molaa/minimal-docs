@@ -1,0 +1,721 @@
+---
+title: Core Functions
+icon: ⚙️
+---
+
+<Heading level="1">
+    miniMAL Core Functions
+</Heading>
+
+<Paragraph>
+    These functions are defined in <Mark>core.json</Mark> and available in all implementations.
+</Paragraph>
+
+<Heading level="2">
+    Arithmetic Operations
+</Heading>
+
+<Table>
+    <TableRow>
+        <TableCell>
+            Function
+        </TableCell>
+        <TableCell>
+            Usage
+        </TableCell>
+        <TableCell>
+            Description
+        </TableCell>
+    </TableRow>
+    <TableRow>
+        <TableCell>
+            <Mark>+</Mark>
+        </TableCell>
+        <TableCell>
+            <Mark>["+", a, b]</Mark>
+        </TableCell>
+        <TableCell>
+            Addition
+        </TableCell>
+    </TableRow>
+    <TableRow>
+        <TableCell>
+            <Mark>-</Mark>
+        </TableCell>
+        <TableCell>
+            <Mark>["-", a, b]</Mark>
+        </TableCell>
+        <TableCell>
+            Subtraction
+        </TableCell>
+    </TableRow>
+    <TableRow>
+        <TableCell>
+            <Mark>*</Mark>
+        </TableCell>
+        <TableCell>
+            <Mark>["*", a, b]</Mark>
+        </TableCell>
+        <TableCell>
+            Multiplication
+        </TableCell>
+    </TableRow>
+    <TableRow>
+        <TableCell>
+            <Mark>/</Mark>
+        </TableCell>
+        <TableCell>
+            <Mark>["/", a, b]</Mark>
+        </TableCell>
+        <TableCell>
+            Division (integer)
+        </TableCell>
+    </TableRow>
+</Table>
+
+<Heading level="2">
+    Comparison Operations
+</Heading>
+
+<Table>
+    <TableRow>
+        <TableCell>
+            Function
+        </TableCell>
+        <TableCell>
+            Usage
+        </TableCell>
+        <TableCell>
+            Description
+        </TableCell>
+    </TableRow>
+    <TableRow>
+        <TableCell>
+            <Mark>=</Mark>
+        </TableCell>
+        <TableCell>
+            <Mark>["=", a, b]</Mark>
+        </TableCell>
+        <TableCell>
+            Equality
+        </TableCell>
+    </TableRow>
+    <TableRow>
+        <TableCell>
+            <Mark><</Mark>
+        </TableCell>
+        <TableCell>
+            <Mark>["<", a, b]</Mark>
+        </TableCell>
+        <TableCell>
+            Less than
+        </TableCell>
+    </TableRow>
+    <TableRow>
+        <TableCell>
+            <Mark>></Mark>
+        </TableCell>
+        <TableCell>
+            <Mark>[">", a, b]</Mark>
+        </TableCell>
+        <TableCell>
+            Greater than
+        </TableCell>
+    </TableRow>
+    <TableRow>
+        <TableCell>
+            <Mark>>=</Mark>
+        </TableCell>
+        <TableCell>
+            <Mark>[">=", a, b]</Mark>
+        </TableCell>
+        <TableCell>
+            Greater or equal
+        </TableCell>
+    </TableRow>
+    <TableRow>
+        <TableCell>
+            <Mark><=</Mark>
+        </TableCell>
+        <TableCell>
+            <Mark>["<=", a, b]</Mark>
+        </TableCell>
+        <TableCell>
+            Less or equal
+        </TableCell>
+    </TableRow>
+</Table>
+
+<Heading level="2">
+    List Operations
+</Heading>
+
+<Table>
+    <TableRow>
+        <TableCell>
+            Function
+        </TableCell>
+        <TableCell>
+            Usage
+        </TableCell>
+        <TableCell>
+            Description
+        </TableCell>
+    </TableRow>
+    <TableRow>
+        <TableCell>
+            <Mark>list</Mark>
+        </TableCell>
+        <TableCell>
+            <Mark>["list", a, b, c]</Mark>
+        </TableCell>
+        <TableCell>
+            Create list
+        </TableCell>
+    </TableRow>
+    <TableRow>
+        <TableCell>
+            <Mark>list?</Mark>
+        </TableCell>
+        <TableCell>
+            <Mark>["list?", lst]</Mark>
+        </TableCell>
+        <TableCell>
+            Check if list
+        </TableCell>
+    </TableRow>
+    <TableRow>
+        <TableCell>
+            <Mark>count</Mark>
+        </TableCell>
+        <TableCell>
+            <Mark>["count", lst]</Mark>
+        </TableCell>
+        <TableCell>
+            Number of elements
+        </TableCell>
+    </TableRow>
+    <TableRow>
+        <TableCell>
+            <Mark>first</Mark>
+        </TableCell>
+        <TableCell>
+            <Mark>["first", lst]</Mark>
+        </TableCell>
+        <TableCell>
+            First element
+        </TableCell>
+    </TableRow>
+    <TableRow>
+        <TableCell>
+            <Mark>rest</Mark>
+        </TableCell>
+        <TableCell>
+            <Mark>["rest", lst]</Mark>
+        </TableCell>
+        <TableCell>
+            All but first
+        </TableCell>
+    </TableRow>
+    <TableRow>
+        <TableCell>
+            <Mark>nth</Mark>
+        </TableCell>
+        <TableCell>
+            <Mark>["nth", lst, idx]</Mark>
+        </TableCell>
+        <TableCell>
+            Element at index
+        </TableCell>
+    </TableRow>
+    <TableRow>
+        <TableCell>
+            <Mark>empty?</Mark>
+        </TableCell>
+        <TableCell>
+            <Mark>["empty?", lst]</Mark>
+        </TableCell>
+        <TableCell>
+            Check if empty
+        </TableCell>
+    </TableRow>
+    <TableRow>
+        <TableCell>
+            <Mark>map</Mark>
+        </TableCell>
+        <TableCell>
+            <Mark>["map", fn, lst]</Mark>
+        </TableCell>
+        <TableCell>
+            Apply fn to each
+        </TableCell>
+    </TableRow>
+    <TableRow>
+        <TableCell>
+            <Mark>apply</Mark>
+        </TableCell>
+        <TableCell>
+            <Mark>["apply", fn, args]</Mark>
+        </TableCell>
+        <TableCell>
+            Apply with list args
+        </TableCell>
+    </TableRow>
+    <TableRow>
+        <TableCell>
+            <Mark>cons</Mark>
+        </TableCell>
+        <TableCell>
+            <Mark>["cons", a, lst]</Mark>
+        </TableCell>
+        <TableCell>
+            Prepend to list
+        </TableCell>
+    </TableRow>
+    <TableRow>
+        <TableCell>
+            <Mark>concat</Mark>
+        </TableCell>
+        <TableCell>
+            <Mark>["concat", lst1, lst2]</Mark>
+        </TableCell>
+        <TableCell>
+            Concatenate lists
+        </TableCell>
+    </TableRow>
+</Table>
+
+<Heading level="2">
+    Hash Map Operations
+</Heading>
+
+<Table>
+    <TableRow>
+        <TableCell>
+            Function
+        </TableCell>
+        <TableCell>
+            Usage
+        </TableCell>
+        <TableCell>
+            Description
+        </TableCell>
+    </TableRow>
+    <TableRow>
+        <TableCell>
+            <Mark>get</Mark>
+        </TableCell>
+        <TableCell>
+            <Mark>["get", hm, key]</Mark>
+        </TableCell>
+        <TableCell>
+            Get value (null if not found)
+        </TableCell>
+    </TableRow>
+    <TableRow>
+        <TableCell>
+            <Mark>set</Mark>
+        </TableCell>
+        <TableCell>
+            <Mark>["set", hm, key, val]</Mark>
+        </TableCell>
+        <TableCell>
+            Set key-value
+        </TableCell>
+    </TableRow>
+    <TableRow>
+        <TableCell>
+            <Mark>contains?</Mark>
+        </TableCell>
+        <TableCell>
+            <Mark>["contains?", hm, key]</Mark>
+        </TableCell>
+        <TableCell>
+            Check if key exists
+        </TableCell>
+    </TableRow>
+    <TableRow>
+        <TableCell>
+            <Mark>keys</Mark>
+        </TableCell>
+        <TableCell>
+            <Mark>["keys", hm]</Mark>
+        </TableCell>
+        <TableCell>
+            List of keys
+        </TableCell>
+    </TableRow>
+    <TableRow>
+        <TableCell>
+            <Mark>vals</Mark>
+        </TableCell>
+        <TableCell>
+            <Mark>["vals", hm]</Mark>
+        </TableCell>
+        <TableCell>
+            List of values
+        </TableCell>
+    </TableRow>
+</Table>
+
+<Heading level="2">
+    String/Print Operations
+</Heading>
+
+<Table>
+    <TableRow>
+        <TableCell>
+            Function
+        </TableCell>
+        <TableCell>
+            Usage
+        </TableCell>
+        <TableCell>
+            Description
+        </TableCell>
+    </TableRow>
+    <TableRow>
+        <TableCell>
+            <Mark>pr-str</Mark>
+        </TableCell>
+        <TableCell>
+            <Mark>["pr-str", a, b]</Mark>
+        </TableCell>
+        <TableCell>
+            Print to string (quoted)
+        </TableCell>
+    </TableRow>
+    <TableRow>
+        <TableCell>
+            <Mark>str</Mark>
+        </TableCell>
+        <TableCell>
+            <Mark>["str", a, b]</Mark>
+        </TableCell>
+        <TableCell>
+            Print to string (unquoted)
+        </TableCell>
+    </TableRow>
+    <TableRow>
+        <TableCell>
+            <Mark>prn</Mark>
+        </TableCell>
+        <TableCell>
+            <Mark>["prn", a, b]</Mark>
+        </TableCell>
+        <TableCell>
+            Print with newline (quoted)
+        </TableCell>
+    </TableRow>
+    <TableRow>
+        <TableCell>
+            <Mark>println</Mark>
+        </TableCell>
+        <TableCell>
+            <Mark>["println", a, b]</Mark>
+        </TableCell>
+        <TableCell>
+            Print with newline (unquoted)
+        </TableCell>
+    </TableRow>
+    <TableRow>
+        <TableCell>
+            <Mark>string?</Mark>
+        </TableCell>
+        <TableCell>
+            <Mark>["string?", x]</Mark>
+        </TableCell>
+        <TableCell>
+            Check if string
+        </TableCell>
+    </TableRow>
+</Table>
+
+<Heading level="2">
+    Type Checking
+</Heading>
+
+<Table>
+    <TableRow>
+        <TableCell>
+            Function
+        </TableCell>
+        <TableCell>
+            Usage
+        </TableCell>
+        <TableCell>
+            Description
+        </TableCell>
+    </TableRow>
+    <TableRow>
+        <TableCell>
+            <Mark>null?</Mark>
+        </TableCell>
+        <TableCell>
+            <Mark>["null?", x]</Mark>
+        </TableCell>
+        <TableCell>
+            Check if null
+        </TableCell>
+    </TableRow>
+    <TableRow>
+        <TableCell>
+            <Mark>true?</Mark>
+        </TableCell>
+        <TableCell>
+            <Mark>["true?", x]</Mark>
+        </TableCell>
+        <TableCell>
+            Check if true
+        </TableCell>
+    </TableRow>
+    <TableRow>
+        <TableCell>
+            <Mark>false?</Mark>
+        </TableCell>
+        <TableCell>
+            <Mark>["false?", x]</Mark>
+        </TableCell>
+        <TableCell>
+            Check if false
+        </TableCell>
+    </TableRow>
+    <TableRow>
+        <TableCell>
+            <Mark>not</Mark>
+        </TableCell>
+        <TableCell>
+            <Mark>["not", x]</Mark>
+        </TableCell>
+        <TableCell>
+            Logical NOT
+        </TableCell>
+    </TableRow>
+    <TableRow>
+        <TableCell>
+            <Mark>classOf</Mark>
+        </TableCell>
+        <TableCell>
+            <Mark>["classOf", x]</Mark>
+        </TableCell>
+        <TableCell>
+            Get type string
+        </TableCell>
+    </TableRow>
+</Table>
+
+<Heading level="2">
+    Control Flow
+</Heading>
+
+<Table>
+    <TableRow>
+        <TableCell>
+            Function
+        </TableCell>
+        <TableCell>
+            Usage
+        </TableCell>
+        <TableCell>
+            Description
+        </TableCell>
+    </TableRow>
+    <TableRow>
+        <TableCell>
+            <Mark>and</Mark>
+        </TableCell>
+        <TableCell>
+            <Mark>["and", a, b, c]</Mark>
+        </TableCell>
+        <TableCell>
+            Logical AND (macro)
+        </TableCell>
+    </TableRow>
+    <TableRow>
+        <TableCell>
+            <Mark>or</Mark>
+        </TableCell>
+        <TableCell>
+            <Mark>["or", a, b, c]</Mark>
+        </TableCell>
+        <TableCell>
+            Logical OR (macro)
+        </TableCell>
+    </TableRow>
+</Table>
+
+<Heading level="2">
+    Interop Functions
+</Heading>
+
+<Table>
+    <TableRow>
+        <TableCell>
+            Function
+        </TableCell>
+        <TableCell>
+            Usage
+        </TableCell>
+        <TableCell>
+            Description
+        </TableCell>
+    </TableRow>
+    <TableRow>
+        <TableCell>
+            <Mark>.</Mark>
+        </TableCell>
+        <TableCell>
+            <Mark>["." , obj, ["`", "method"], args]</Mark>
+        </TableCell>
+        <TableCell>
+            Call method
+        </TableCell>
+    </TableRow>
+    <TableRow>
+        <TableCell>
+            <Mark>.-</Mark>
+        </TableCell>
+        <TableCell>
+            <Mark>[" .-", obj, ["`", "prop"]]</Mark>
+        </TableCell>
+        <TableCell>
+            Get/set property
+        </TableCell>
+    </TableRow>
+    <TableRow>
+        <TableCell>
+            <Mark>new</Mark>
+        </TableCell>
+        <TableCell>
+            <Mark>["new", obj, args]</Mark>
+        </TableCell>
+        <TableCell>
+            Construct object
+        </TableCell>
+    </TableRow>
+    <TableRow>
+        <TableCell>
+            <Mark>del</Mark>
+        </TableCell>
+        <TableCell>
+            <Mark>["del", obj, key]</Mark>
+        </TableCell>
+        <TableCell>
+            Delete property
+        </TableCell>
+    </TableRow>
+    <TableRow>
+        <TableCell>
+            <Mark>isa</Mark>
+        </TableCell>
+        <TableCell>
+            <Mark>["isa", obj, type]</Mark>
+        </TableCell>
+        <TableCell>
+            Check type
+        </TableCell>
+    </TableRow>
+</Table>
+
+<Heading level="2">
+    I/O Functions
+</Heading>
+
+<Table>
+    <TableRow>
+        <TableCell>
+            Function
+        </TableCell>
+        <TableCell>
+            Usage
+        </TableCell>
+        <TableCell>
+            Description
+        </TableCell>
+    </TableRow>
+    <TableRow>
+        <TableCell>
+            <Mark>read</Mark>
+        </TableCell>
+        <TableCell>
+            <Mark>["read", str]</Mark>
+        </TableCell>
+        <TableCell>
+            Parse JSON string
+        </TableCell>
+    </TableRow>
+    <TableRow>
+        <TableCell>
+            <Mark>slurp</Mark>
+        </TableCell>
+        <TableCell>
+            <Mark>["slurp", path]</Mark>
+        </TableCell>
+        <TableCell>
+            Read file contents
+        </TableCell>
+    </TableRow>
+    <TableRow>
+        <TableCell>
+            <Mark>pr*</Mark>
+        </TableCell>
+        <TableCell>
+            <Mark>["pr*", x]</Mark>
+        </TableCell>
+        <TableCell>
+            JSON stringify
+        </TableCell>
+    </TableRow>
+    <TableRow>
+        <TableCell>
+            <Mark>argv</Mark>
+        </TableCell>
+        <TableCell>
+            <Mark>"argv"</Mark>
+        </TableCell>
+        <TableCell>
+            Command line args
+        </TableCell>
+    </TableRow>
+</Table>
+
+<Heading level="2">
+    Exception Handling
+</Heading>
+
+<Table>
+    <TableRow>
+        <TableCell>
+            Function
+        </TableCell>
+        <TableCell>
+            Usage
+        </TableCell>
+        <TableCell>
+            Description
+        </TableCell>
+    </TableRow>
+    <TableRow>
+        <TableCell>
+            <Mark>throw</Mark>
+        </TableCell>
+        <TableCell>
+            <Mark>["throw", value]</Mark>
+        </TableCell>
+        <TableCell>
+            Throw exception
+        </TableCell>
+    </TableRow>
+</Table>
+
+<Paragraph blockColor="light_grey">
+<Paragraph>
+    <Mark>["try",</Mark>
+</Paragraph>
+<Paragraph>
+    <Mark>    ["throw", 123],</Mark>
+</Paragraph>
+<Paragraph>
+    <Mark>    ["catch", "exc", handler]]</Mark>
+</Paragraph>
+</Paragraph>

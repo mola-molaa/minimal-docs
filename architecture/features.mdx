@@ -1,0 +1,277 @@
+---
+title: Core Features
+icon: ✨
+---
+
+<Heading level="1">
+    miniMAL Core Features
+</Heading>
+
+<Heading level="2">
+    JSON Source Code
+</Heading>
+
+<Paragraph>
+    miniMAL programs are written in plain <Mark bold>JSON</Mark> format. This makes parsing trivial and allows the language to be very compact.
+</Paragraph>
+
+<Paragraph blockColor="light_grey">
+<Paragraph>
+    <Mark>["+", 2, 3]</Mark>
+</Paragraph>
+<Paragraph>
+    <Mark>= 5</Mark>
+</Paragraph>
+<Paragraph>
+    <Mark>["if", ["=", 5, 5], 7, 8]</Mark>
+</Paragraph>
+<Paragraph>
+    <Mark>= 7</Mark>
+</Paragraph>
+</Paragraph>
+
+<Heading level="2">
+    Lisp-0 Architecture
+</Heading>
+
+<Paragraph>
+    miniMAL is a <Mark bold>"Lisp-0"</Mark> language where functions, symbols, and strings all share the same namespace:
+</Paragraph>
+
+<ColumnList>
+    <Column width="33%">
+        <Paragraph>
+            <Mark bold>Lisp-1</Mark>
+        </Paragraph>
+        <Paragraph>
+            Functions and symbols share namespace (strings separate)
+        </Paragraph>
+    </Column>
+    <Column width="33%">
+        <Paragraph>
+            <Mark bold>Lisp-2</Mark>
+        </Paragraph>
+        <Paragraph>
+            Functions and symbols have separate namespaces
+        </Paragraph>
+    </Column>
+    <Column width="33%">
+        <Paragraph>
+            <Mark bold>Lisp-0 (miniMAL)</Mark>
+        </Paragraph>
+        <Paragraph>
+            Single namespace for all three
+        </Paragraph>
+    </Column>
+</ColumnList>
+
+<Paragraph>
+    Example:
+</Paragraph>
+
+<Paragraph blockColor="light_grey">
+<Paragraph>
+    <Mark>["def", "a_symbol", 3]</Mark>
+</Paragraph>
+<Paragraph>
+    <Mark>=> 3</Mark>
+</Paragraph>
+<Paragraph>
+    <Mark>"a_symbol"</Mark>
+</Paragraph>
+<Paragraph>
+    <Mark>=> 3</Mark>
+</Paragraph>
+<Paragraph>
+    <Mark>["*", "a_symbol", 6]</Mark>
+</Paragraph>
+<Paragraph>
+    <Mark>=> 18</Mark>
+</Paragraph>
+<Paragraph>
+    <Mark>["`", "a quoted symbol is a string"]</Mark>
+</Paragraph>
+<Paragraph>
+    <Mark>=> "a quoted symbol is a string"</Mark>
+</Paragraph>
+</Paragraph>
+
+<Heading level="2">
+    Tail-Call Optimization (TCO)
+</Heading>
+
+<Paragraph>
+    miniMAL automatically optimizes <Mark bold>tail calls</Mark> to prevent stack overflow during recursion:
+</Paragraph>
+
+<Paragraph blockColor="light_grey">
+<Paragraph>
+    <Mark>["def", "sum2", ["fn", ["n", "acc"],</Mark>
+</Paragraph>
+<Paragraph>
+    <Mark>    ["if", ["=", "n", 0], "acc",</Mark>
+</Paragraph>
+<Paragraph>
+    <Mark>        ["sum2", ["-", "n", 1], ["+", "n", "acc"]]]]]</Mark>
+</Paragraph>
+<Paragraph>
+    <Mark>["sum2", 10000, 0]</Mark>
+</Paragraph>
+<Paragraph>
+    <Mark>=> 50005000  (no stack overflow!)</Mark>
+</Paragraph>
+</Paragraph>
+
+<Callout icon="⚠️" blockColor="yellow" borderColor="light_orange">
+    Without TCO (sum1) would fail with stack overflow at 10000 iterations, but sum2 with TCO handles it perfectly.
+</Callout>
+
+<Heading level="2">
+    Lexical Scoping
+</Heading>
+
+<Paragraph>
+    miniMAL supports full lexical scoping within <Mark>let</Mark> blocks and lambdas:
+</Paragraph>
+
+<Paragraph blockColor="light_grey">
+<Paragraph>
+    <Mark>["def", "add5", ["let", ["x", 5],</Mark>
+</Paragraph>
+<Paragraph>
+    <Mark>    ["fn", ["a"], ["+", "x", "a"]]]]</Mark>
+</Paragraph>
+<Paragraph>
+    <Mark>["add5", 7]</Mark>
+</Paragraph>
+<Paragraph>
+    <Mark>=> 12</Mark>
+</Paragraph>
+<Paragraph>
+    <Mark>"x"</Mark>
+</Paragraph>
+<Paragraph>
+    <Mark>=> not found  (not accessible outside let)</Mark>
+</Paragraph>
+</Paragraph>
+
+<Heading level="2">
+    First-Class Functions
+</Heading>
+
+<Paragraph>
+    Functions are first-class values - they can be bound, passed, and returned:
+</Paragraph>
+
+<Paragraph blockColor="light_grey">
+<Paragraph>
+    <Mark>["def", "addX", ["fn", ["X"],</Mark>
+</Paragraph>
+<Paragraph>
+    <Mark>    ["fn", ["a"], ["+", "X", "a"]]]]</Mark>
+</Paragraph>
+<Paragraph>
+    <Mark>["def", "add9", ["addX", 9]]</Mark>
+</Paragraph>
+<Paragraph>
+    <Mark>["add9", 20]</Mark>
+</Paragraph>
+<Paragraph>
+    <Mark>=> 29</Mark>
+</Paragraph>
+</Paragraph>
+
+<Heading level="2">
+    Variadic Functions
+</Heading>
+
+<Paragraph>
+    Functions can accept variable numbers of arguments using the <Mark>&</Mark> delimiter:
+</Paragraph>
+
+<Paragraph blockColor="light_grey">
+<Paragraph>
+    <Mark>["def", "drop1", ["fn", ["a", "&", "b"], "b"]]</Mark>
+</Paragraph>
+<Paragraph>
+    <Mark>["drop1", 1, 2, 3]</Mark>
+</Paragraph>
+<Paragraph>
+    <Mark>=> [2, 3]</Mark>
+</Paragraph>
+</Paragraph>
+
+<Heading level="2">
+    JavaScript Interop
+</Heading>
+
+<Paragraph>
+    Direct access to JavaScript objects and methods using <Mark>. </Mark>and <Mark>.-</Mark>:
+</Paragraph>
+
+<Paragraph blockColor="light_grey">
+<Paragraph>
+    <Mark>["def", "randInt", ["fn", ["max"],</Mark>
+</Paragraph>
+<Paragraph>
+    <Mark>    ["parseInt", ["*", "max", [".", "Math", ["`", "random"]]]]]]</Mark>
+</Paragraph>
+<Paragraph>
+    <Mark>["randInt", 100]</Mark>
+</Paragraph>
+<Paragraph>
+    <Mark>=> 16  (example output)</Mark>
+</Paragraph>
+</Paragraph>
+
+<Heading level="2">
+    Exception Handling
+</Heading>
+
+<Paragraph>
+    miniMAL supports try/catch/throw with arbitrary exception types:
+</Paragraph>
+
+<Paragraph blockColor="light_grey">
+<Paragraph>
+    <Mark>["try",</Mark>
+</Paragraph>
+<Paragraph>
+    <Mark>    ["throw", 123],</Mark>
+</Paragraph>
+<Paragraph>
+    <Mark>    ["catch", "exc", ["list", ["`", "exc was:"], "exc"]]]</Mark>
+</Paragraph>
+<Paragraph>
+    <Mark>=> ["exc was:", 123]</Mark>
+</Paragraph>
+</Paragraph>
+
+<Heading level="2">
+    Macros
+</Heading>
+
+<Paragraph>
+    Create new syntactic structures with macros. Macros receive unevaluated arguments:
+</Paragraph>
+
+<Paragraph blockColor="light_grey">
+<Paragraph>
+    <Mark>["def", "unless", ["~", ["fn", ["p", "a", "b"],</Mark>
+</Paragraph>
+<Paragraph>
+    <Mark>    ["list", ["`", "if"], "p", "b", "a"]]]]</Mark>
+</Paragraph>
+<Paragraph>
+    <Mark>["unless", false, 7, 8]</Mark>
+</Paragraph>
+<Paragraph>
+    <Mark>=> 7</Mark>
+</Paragraph>
+<Paragraph>
+    <Mark>["unless", true, 7, 8]</Mark>
+</Paragraph>
+<Paragraph>
+    <Mark>=> 8</Mark>
+</Paragraph>
+</Paragraph>

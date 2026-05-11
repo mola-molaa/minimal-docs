@@ -1,0 +1,351 @@
+---
+title: JavaScript Implementation
+icon: 🚀
+---
+
+<Heading level="1">
+    JavaScript Implementation
+</Heading>
+
+<Paragraph>
+    miniMAL has multiple JavaScript implementations, each optimized for different use cases.
+</Paragraph>
+
+<Heading level="2">
+    Implementation Variants
+</Heading>
+
+<Table>
+    <TableRow>
+        <TableCell>
+            File
+        </TableCell>
+        <TableCell>
+            Size
+        </TableCell>
+        <TableCell>
+            Description
+        </TableCell>
+    </TableRow>
+    <TableRow>
+        <TableCell>
+            <Mark>miniMAL-core.js</Mark>
+        </TableCell>
+        <TableCell>
+            < 1KB
+        </TableCell>
+        <TableCell>
+            Core interpreter (JS1K entry)
+        </TableCell>
+    </TableRow>
+    <TableRow>
+        <TableCell>
+            <Mark>miniMAL-node.js</Mark>
+        </TableCell>
+        <TableCell>
+            1.2KB
+        </TableCell>
+        <TableCell>
+            Node.js full implementation
+        </TableCell>
+    </TableRow>
+    <TableRow>
+        <TableCell>
+            <Mark>stepB_node.js</Mark>
+        </TableCell>
+        <TableCell>
+            ~2KB
+        </TableCell>
+        <TableCell>
+            Modern readable version
+        </TableCell>
+    </TableRow>
+    <TableRow>
+        <TableCell>
+            <Mark>web/miniMAL-min.js</Mark>
+        </TableCell>
+        <TableCell>
+            Compressed
+        </TableCell>
+        <TableCell>
+            Web browser version
+        </TableCell>
+    </TableRow>
+    <TableRow>
+        <TableCell>
+            <Mark>web/miniMAL-js1k.js</Mark>
+        </TableCell>
+        <TableCell>
+            < 1KB
+        </TableCell>
+        <TableCell>
+            JS1K competition entry
+        </TableCell>
+    </TableRow>
+</Table>
+
+<Heading level="2">
+    Core EVAL Function (JS1K Version)
+</Heading>
+
+<Paragraph>
+    The ultra-compact JS1K version uses a packed string that gets unpacked:
+</Paragraph>
+
+<Paragraph blockColor="light_grey">
+<Paragraph>
+    <Mark>for(_='[0]5"==i5)4return Z4ZY)...</Mark>
+</Paragraph>
+<Paragraph>
+    <Mark>G=/[\\1-\\2...]/.exec(_);</Mark>
+</Paragraph>
+<Paragraph>
+    <Mark>with(_.split(G))_=join(shift());</Mark>
+</Paragraph>
+<Paragraph>
+    <Mark>eval(_)</Mark>
+</Paragraph>
+</Paragraph>
+
+<Heading level="2">
+    Readable Version (stepB_node.js)
+</Heading>
+
+<Paragraph blockColor="light_grey">
+<Paragraph>
+    <Mark>function EVAL(env, ast, f, el) {</Mark>
+</Paragraph>
+<Paragraph>
+    <Mark>    while (true) {</Mark>
+</Paragraph>
+<Paragraph>
+    <Mark>        if (!Array.isArray(ast)) {</Mark>
+</Paragraph>
+<Paragraph>
+    <Mark>            if (typeof ast == "string") {</Mark>
+</Paragraph>
+<Paragraph>
+    <Mark>                return ast in env ? env[ast] : E.throw(ast + " not found");</Mark>
+</Paragraph>
+<Paragraph>
+    <Mark>            } else {</Mark>
+</Paragraph>
+<Paragraph>
+    <Mark>                return ast ?? null;</Mark>
+</Paragraph>
+<Paragraph>
+    <Mark>            }</Mark>
+</Paragraph>
+<Paragraph>
+    <Mark>        } else {</Mark>
+</Paragraph>
+<Paragraph>
+    <Mark>            // Apply forms...</Mark>
+</Paragraph>
+<Paragraph>
+    <Mark>        }</Mark>
+</Paragraph>
+<Paragraph>
+    <Mark>    }</Mark>
+</Paragraph>
+<Paragraph>
+    <Mark>}</Mark>
+</Paragraph>
+</Paragraph>
+
+<Heading level="2">
+    Key Functions
+</Heading>
+
+<Heading level="3">
+    new_env - Environment Creation
+</Heading>
+
+<Paragraph blockColor="light_grey">
+<Paragraph>
+    <Mark>function new_env(env, binds, exprs) {</Mark>
+</Paragraph>
+<Paragraph>
+    <Mark>    env = Object.create(env);</Mark>
+</Paragraph>
+<Paragraph>
+    <Mark>    binds.some((b,i) => b == "&" ? </Mark>
+</Paragraph>
+<Paragraph>
+    <Mark>        env[binds[i+1]] = exprs.slice(i) :</Mark>
+</Paragraph>
+<Paragraph>
+    <Mark>        (env[b] = exprs[i], 0));</Mark>
+</Paragraph>
+<Paragraph>
+    <Mark>    return env;</Mark>
+</Paragraph>
+<Paragraph>
+    <Mark>}</Mark>
+</Paragraph>
+</Paragraph>
+
+<Paragraph>
+    Creates a new environment with prototype chain for scope lookup.
+</Paragraph>
+
+<Heading level="2">
+    Special Forms Implementation
+</Heading>
+
+<Table>
+    <TableRow>
+        <TableCell>
+            Form
+        </TableCell>
+        <TableCell>
+            Implementation
+        </TableCell>
+    </TableRow>
+    <TableRow>
+        <TableCell>
+            <Mark>def</Mark>
+        </TableCell>
+        <TableCell>
+            <Mark>env[ast[1]] = EVAL(env, ast[2])</Mark>
+        </TableCell>
+    </TableRow>
+    <TableRow>
+        <TableCell>
+            <Mark>let</Mark>
+        </TableCell>
+        <TableCell>
+            Create new env, bind, eval body
+        </TableCell>
+    </TableRow>
+    <TableRow>
+        <TableCell>
+            <Mark>fn</Mark>
+        </TableCell>
+        <TableCell>
+            Return function with A property for TCO
+        </TableCell>
+    </TableRow>
+    <TableRow>
+        <TableCell>
+            <Mark>if</Mark>
+        </TableCell>
+        <TableCell>
+            <Mark>ast = condition ? then : else;</Mark>
+        </TableCell>
+    </TableRow>
+    <TableRow>
+        <TableCell>
+            <Mark>do</Mark>
+        </TableCell>
+        <TableCell>
+            Eval all, return last (TCO)
+        </TableCell>
+    </TableRow>
+    <TableRow>
+        <TableCell>
+            <Mark>try</Mark>
+        </TableCell>
+        <TableCell>
+            try/catch with exception binding
+        </TableCell>
+    </TableRow>
+</Table>
+
+<Heading level="2">
+    Node.js CLI Interface
+</Heading>
+
+<Paragraph blockColor="light_grey">
+<Paragraph>
+    <Mark>if (process.argv[2]) {</Mark>
+</Paragraph>
+<Paragraph>
+    <Mark>    return EVAL(E, JSON.parse(</Mark>
+</Paragraph>
+<Paragraph>
+    <Mark>        require("fs").readFileSync(process.argv[2])));</Mark>
+</Paragraph>
+<Paragraph>
+    <Mark>} else {</Mark>
+</Paragraph>
+<Paragraph>
+    <Mark>    require("repl").start({</Mark>
+</Paragraph>
+<Paragraph>
+    <Mark>        eval: (...a) => a[3](0, JSON.stringify(</Mark>
+</Paragraph>
+<Paragraph>
+    <Mark>            EVAL(E, JSON.parse(a[0]))),</Mark>
+</Paragraph>
+<Paragraph>
+    <Mark>        writer: (...a) => a[0]</Mark>
+</Paragraph>
+<Paragraph>
+    <Mark>    });</Mark>
+</Paragraph>
+<Paragraph>
+    <Mark>}</Mark>
+</Paragraph>
+</Paragraph>
+
+<Heading level="2">
+    Web Version
+</Heading>
+
+<Paragraph>
+    The web version exposes miniMAL as a global function:
+</Paragraph>
+
+<Paragraph blockColor="light_grey">
+<Paragraph>
+    <Mark>miniMAL = function(E) {</Mark>
+</Paragraph>
+<Paragraph>
+    <Mark>    // ... EVAL implementation ...</Mark>
+</Paragraph>
+<Paragraph>
+    <Mark>    return E;</Mark>
+</Paragraph>
+<Paragraph>
+    <Mark>}</Mark>
+</Paragraph>
+</Paragraph>
+
+<Paragraph>
+    Usage in browser:
+</Paragraph>
+
+<Paragraph blockColor="light_grey">
+<Paragraph>
+    <Mark><script src="miniMAL-min.js"></script></Mark>
+</Paragraph>
+<Paragraph>
+    <Mark><script></Mark>
+</Paragraph>
+<Paragraph>
+    <Mark>var m = miniMAL();</Mark>
+</Paragraph>
+<Paragraph>
+    <Mark>m.eval(["+", 2, 3]);</Mark>
+</Paragraph>
+<Paragraph>
+    <Mark></script></Mark>
+</Paragraph>
+</Paragraph>
+
+<Heading level="2">
+    npm Package
+</Heading>
+
+<Paragraph>
+    Package name: <Mark>minimal-lisp</Mark>
+</Paragraph>
+
+<Paragraph>
+    Main entry: <Mark>miniMAL-node.js</Mark>
+</Paragraph>
+
+<Paragraph>
+    Binary: <Mark>miniMAL</Mark> (runs <Mark>miniMAL</Mark> command)
+</Paragraph>

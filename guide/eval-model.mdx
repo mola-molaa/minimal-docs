@@ -1,0 +1,332 @@
+---
+title: Evaluation Model
+icon: ⚙️
+---
+
+<Heading level="1">
+    miniMAL Evaluation Model
+</Heading>
+
+<Paragraph>
+    The core of miniMAL is the <Mark bold>EVAL</Mark> function which implements a simple recursive descent evaluator with tail-call optimization.
+</Paragraph>
+
+<Heading level="2">
+    Evaluation Rules
+</Heading>
+
+<Heading level="3">
+    Atom Evaluation
+</Heading>
+
+<Paragraph>
+    When EVAL encounters a non-list (atom):
+</Paragraph>
+
+<BulletedList>
+    <BulletedList>
+        <Mark bold>String</Mark>: Look up in environment (symbol), throw if not found
+    </BulletedList>
+    <BulletedList>
+        <Mark bold>Number</Mark>: Return as-is
+    </BulletedList>
+    <BulletedList>
+        <Mark bold>Boolean/null</Mark>: Return as-is
+    </BulletedList>
+    <BulletedList>
+        <Mark bold>Object (hash-map)</Mark>: Recursively evaluate values
+    </BulletedList>
+</BulletedList>
+
+<Heading level="3">
+    List Evaluation (Apply)
+</Heading>
+
+<Paragraph>
+    When EVAL encounters a list:
+</Paragraph>
+
+<BulletedList>
+    <BulletedList>
+        Check if first element is a <Mark bold>special form</Mark>
+    </BulletedList>
+    <BulletedList>
+        If special form: handle specially
+    </BulletedList>
+    <BulletedList>
+        Otherwise: evaluate all elements, then apply function
+    </BulletedList>
+</BulletedList>
+
+<Heading level="2">
+    Special Forms
+</Heading>
+
+<Heading level="3">
+    def - Define Symbol
+</Heading>
+
+<Paragraph blockColor="light_grey">
+<Paragraph>
+    <Mark>["def", "x", 42]</Mark>
+</Paragraph>
+<Paragraph>
+    <Mark>=> 42  (x is now bound to 42)</Mark>
+</Paragraph>
+</Paragraph>
+
+<Paragraph>
+    Updates the current environment by binding symbol to evaluated value.
+</Paragraph>
+
+<Heading level="3">
+    fn - Create Function
+</Heading>
+
+<Paragraph blockColor="light_grey">
+<Paragraph>
+    <Mark>["fn", ["a", "b"], ["+", "a", "b"]]</Mark>
+</Paragraph>
+<Paragraph>
+    <Mark>=> function  (closure)</Mark>
+</Paragraph>
+</Paragraph>
+
+<Paragraph>
+    Creates a closure that captures the current environment. The function has an <Mark bold>A</Mark> property storing [body, env, params] for TCO.
+</Paragraph>
+
+<Heading level="3">
+    let - Lexical Binding
+</Heading>
+
+<Paragraph blockColor="light_grey">
+<Paragraph>
+    <Mark>["let", ["x", 5, "y", 10], ["+", "x", "y"]]</Mark>
+</Paragraph>
+<Paragraph>
+    <Mark>=> 15</Mark>
+</Paragraph>
+</Paragraph>
+
+<Paragraph>
+    Creates a new environment (child of current) with the given bindings, then evaluates body in that environment.
+</Paragraph>
+
+<Heading level="3">
+    if - Conditional
+</Heading>
+
+<Paragraph blockColor="light_grey">
+<Paragraph>
+    <Mark>["if", condition, true_branch, false_branch]</Mark>
+</Paragraph>
+</Paragraph>
+
+<Paragraph>
+    Evaluates condition, then evaluates only the matching branch (short-circuit).
+</Paragraph>
+
+<Heading level="3">
+    do - Sequential Evaluation
+</Heading>
+
+<Paragraph blockColor="light_grey">
+<Paragraph>
+    <Mark>["do", expr1, expr2, expr3]</Mark>
+</Paragraph>
+<Paragraph>
+    <Mark>=> value of expr3</Mark>
+</Paragraph>
+</Paragraph>
+
+<Paragraph>
+    Evaluates all expressions sequentially, returns the last value.
+</Paragraph>
+
+<Heading level="3">
+    ` - Quote
+</Heading>
+
+<Paragraph blockColor="light_grey">
+<Paragraph>
+    <Mark>["`", "symbol_name"]</Mark>
+</Paragraph>
+<Paragraph>
+    <Mark>=> "symbol_name"  (unevaluated)</Mark>
+</Paragraph>
+</Paragraph>
+
+<Heading level="3">
+    ~ - Macro Marker
+</Heading>
+
+<Paragraph blockColor="light_grey">
+<Paragraph>
+    <Mark>["~", function]</Mark>
+</Paragraph>
+<Paragraph>
+    <Mark>=> function with .M = 1 (marked as macro)</Mark>
+</Paragraph>
+</Paragraph>
+
+<Heading level="3">
+    . - Method Call
+</Heading>
+
+<Paragraph blockColor="light_grey">
+<Paragraph>
+    <Mark>["." , "Math", ["`", "random"]]</Mark>
+</Paragraph>
+<Paragraph>
+    <Mark>=> calls Math.random()</Mark>
+</Paragraph>
+</Paragraph>
+
+<Heading level="3">
+    .- - Property Get/Set
+</Heading>
+
+<Paragraph blockColor="light_grey">
+<Paragraph>
+    <Mark>[" .-", obj, ["`", "property"]]</Mark>
+</Paragraph>
+<Paragraph>
+    <Mark>[" .-", obj, ["`", "prop"], value]  (set)</Mark>
+</Paragraph>
+</Paragraph>
+
+<Heading level="3">
+    try - Exception Handling
+</Heading>
+
+<Paragraph blockColor="light_grey">
+<Paragraph>
+    <Mark>["try", body_expr, ["catch", "exc_var", handler_expr]]</Mark>
+</Paragraph>
+</Paragraph>
+
+<Heading level="2">
+    Tail-Call Optimization
+</Heading>
+
+<Paragraph>
+    miniMAL implements TCO by using a <Mark bold>while(true) loop</Mark> in EVAL instead of recursion:
+</Paragraph>
+
+<Paragraph blockColor="light_grey">
+<Paragraph>
+    <Mark>function EVAL(env, ast) {</Mark>
+</Paragraph>
+<Paragraph>
+    <Mark>    while (true) {</Mark>
+</Paragraph>
+<Paragraph>
+    <Mark>        // ...</Mark>
+</Paragraph>
+<Paragraph>
+    <Mark>        if (ast[0] == "if") {</Mark>
+</Paragraph>
+<Paragraph>
+    <Mark>            ast = EVAL(env, ast[1]) ? ast[2] : ast[3];</Mark>
+</Paragraph>
+<Paragraph>
+    <Mark>            // TCO: loop continues with new ast</Mark>
+</Paragraph>
+<Paragraph>
+    <Mark>        }</Mark>
+</Paragraph>
+<Paragraph>
+    <Mark>    }</Mark>
+</Paragraph>
+<Paragraph>
+    <Mark>}</Mark>
+</Paragraph>
+</Paragraph>
+
+<Paragraph>
+    When a tail call is detected (function with <Mark>A</Mark> property), instead of calling the function, EVAL:
+</Paragraph>
+
+<BulletedList>
+    <BulletedList>
+        Sets <Mark>ast</Mark> to the function body
+    </BulletedList>
+    <BulletedList>
+        Creates new environment with bound parameters
+    </BulletedList>
+    <BulletedList>
+        Continues the while loop (no stack growth)
+    </BulletedList>
+</BulletedList>
+
+<Heading level="2">
+    Environment Model
+</Heading>
+
+<Paragraph>
+    Environments are JavaScript objects with <Mark bold>prototype chain</Mark> for scope lookup:
+</Paragraph>
+
+<Paragraph blockColor="light_grey">
+<Paragraph>
+    <Mark>function new_env(env, binds, exprs) {</Mark>
+</Paragraph>
+<Paragraph>
+    <Mark>    env = Object.create(env);  // child of parent</Mark>
+</Paragraph>
+<Paragraph>
+    <Mark>    // bind parameters...</Mark>
+</Paragraph>
+<Paragraph>
+    <Mark>    return env;</Mark>
+</Paragraph>
+<Paragraph>
+    <Mark>}</Mark>
+</Paragraph>
+</Paragraph>
+
+<Paragraph>
+    Symbol lookup walks up the prototype chain:
+</Paragraph>
+
+<Paragraph blockColor="light_grey">
+<Paragraph>
+    <Mark>if (typeof ast == "string") {</Mark>
+</Paragraph>
+<Paragraph>
+    <Mark>    return ast in env ? env[ast] : throw(ast + " not found");</Mark>
+</Paragraph>
+<Paragraph>
+    <Mark>}</Mark>
+</Paragraph>
+</Paragraph>
+
+<Heading level="2">
+    Macro Expansion
+</Heading>
+
+<Paragraph>
+    Before evaluation, macros are expanded:
+</Paragraph>
+
+<Paragraph blockColor="light_grey">
+<Paragraph>
+    <Mark>function macroexpand(ast, env) {</Mark>
+</Paragraph>
+<Paragraph>
+    <Mark>    while (ast instanceof Array && ast[0] in env && env[ast[0]].M) {</Mark>
+</Paragraph>
+<Paragraph>
+    <Mark>        ast = env[ast[0]](...ast.slice(1));  // expand</Mark>
+</Paragraph>
+<Paragraph>
+    <Mark>    }</Mark>
+</Paragraph>
+<Paragraph>
+    <Mark>    return ast;</Mark>
+</Paragraph>
+<Paragraph>
+    <Mark>}</Mark>
+</Paragraph>
+</Paragraph>

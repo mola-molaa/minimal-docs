@@ -1,0 +1,137 @@
+---
+title: Introduction to miniMAL
+icon: 🚀
+cover: https://raw.githubusercontent.com/kanaka/miniMAL/main/README.md
+---
+
+<Heading level="1">
+    What is miniMAL?
+</Heading>
+
+<Paragraph>
+    <Mark bold>miniMAL</Mark> (Minimal Lisp) is a delightful diminutive Lisp interpreter implemented in less than <Mark bold>1024 bytes</Mark> of JavaScript. It is Clojure-inspired yet significantly different in syntax and functionality, using <Mark bold>JSON</Mark> as its source code format.
+</Paragraph>
+
+<Heading level="2">
+    Key Features
+</Heading>
+
+<BulletedList>
+    <BulletedList>
+        <Mark bold>JSON Source</Mark>: Programs are written in plain JSON format
+    </BulletedList>
+    <BulletedList>
+        <Mark bold>Tail-Call Optimization</Mark>: Efficient recursion without stack overflow
+    </BulletedList>
+    <BulletedList>
+        <Mark bold>Macros</Mark>: Write new syntactic structures with macro support
+    </BulletedList>
+    <BulletedList>
+        <Mark bold>JavaScript Interop</Mark>: Direct access to JavaScript objects and methods
+    </BulletedList>
+    <BulletedList>
+        <Mark bold>Error Handling</Mark>: try/catch/throw style exception handling
+    </BulletedList>
+    <BulletedList>
+        <Mark bold>Multi-language</Mark>: Implementations in JavaScript, Python, and ClojureScript
+    </BulletedList>
+</BulletedList>
+
+<Heading level="2">
+    Quick Example
+</Heading>
+
+<Paragraph>
+    Here is a simple miniMAL program:
+</Paragraph>
+
+<Paragraph blockColor="light_grey">
+<Paragraph>
+    <Mark>["+", 2, 3]</Mark>
+</Paragraph>
+<Paragraph>
+    <Mark bold>Result: 5</Mark>
+</Paragraph>
+</Paragraph>
+
+<Paragraph>
+    With variables and functions:
+</Paragraph>
+
+<Paragraph blockColor="light_grey">
+<Paragraph>
+    <Mark>["def", "sqr", ["fn", ["a"], ["*", "a", "a"]]]</Mark>
+</Paragraph>
+<Paragraph>
+    <Mark>["sqr", 7]</Mark>
+</Paragraph>
+<Paragraph>
+    <Mark bold>Result: 49</Mark>
+</Paragraph>
+</Paragraph>
+
+<Heading level="2">
+    Implementation Stats
+</Heading>
+
+<Table>
+    <TableRow>
+        <TableCell>
+            Language
+        </TableCell>
+        <TableCell>
+            Size
+        </TableCell>
+        <TableCell>
+            Notes
+        </TableCell>
+    </TableRow>
+    <TableRow>
+        <TableCell>
+            JavaScript (JS1K)
+        </TableCell>
+        <TableCell>
+            < 1024 bytes
+        </TableCell>
+        <TableCell>
+            Core interpreter
+        </TableCell>
+    </TableRow>
+    <TableRow>
+        <TableCell>
+            JavaScript (Node)
+        </TableCell>
+        <TableCell>
+            1.2KB
+        </TableCell>
+        <TableCell>
+            Full featured
+        </TableCell>
+    </TableRow>
+    <TableRow>
+        <TableCell>
+            Python
+        </TableCell>
+        <TableCell>
+            1.1KB (.pyz)
+        </TableCell>
+        <TableCell>
+            Cross-platform
+        </TableCell>
+    </TableRow>
+    <TableRow>
+        <TableCell>
+            ClojureScript
+        </TableCell>
+        <TableCell>
+            1.8KB
+        </TableCell>
+        <TableCell>
+            JVM/CLJS runtime
+        </TableCell>
+    </TableRow>
+</Table>
+
+<Paragraph>
+    miniMAL is powerful enough to implement a full <Link href="https://github.com/kanaka/mal/tree/master/impls/miniMAL">Make-A-Lisp</Link> interpreter in itself.
+</Paragraph>
